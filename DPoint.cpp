@@ -25,3 +25,17 @@ bool DPoint::operator==(const DPoint &p){
 bool DPoint::operator!=(const DPoint &p){
   return (Position != p.Position);
 }
+//Override of the operator minor
+bool DPoint::operator<(const DPoint &p){
+  float mod1;
+  float mod2;
+  float dist1 = 0;
+  float dist2 = 0;
+  for(int i = 0; i < getDimension(); i++){
+    dist1 += pow((double)Position[i], 2);
+    dist2 += pow((double)p.Position[i], 2);
+  }
+  mod1 = sqrt(dist1);
+  mod2 = sqrt(dist2);
+  return mod1 < mod2;
+}

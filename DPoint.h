@@ -16,6 +16,7 @@ public:
   virtual float Distance(DPoint p);
   bool operator== (const DPoint &p);
   bool operator!= (const DPoint &p);
+  bool operator< (const DPoint &p);
 };
 
 #endif

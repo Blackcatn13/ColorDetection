@@ -4,6 +4,7 @@
 #include "DPoint.h"
 #include <vector>
 #include <algorithm>
+#include <list>
 
 using namespace std;
 // Class that represents a set of DPoints
