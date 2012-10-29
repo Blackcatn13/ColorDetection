@@ -11,12 +11,21 @@ Kmeans::Kmeans(Set s){
   Points = s.getPoints();
 }
 // Function that calculate the K-Mean algorithm returning the clusters
-vector<Set> Kmeans::Calculate(int k){
+vector<Set> Kmeans::Calculate(int k, bool verbose){
+  int loops = 0;
+  clock_t c;
   bool equals = false;
   // We get the first random inertia center for the point set 
   InertiaCenter = InitialSet.getRandomPoints(k);
+  if(verbose) {
+    cout << "The number of points is: " << Points.size() << endl;
+  }
   // While the actual inertia center is diferent that the t-1 inertia center we make another loop
   do{
+    if(verbose) {
+    cout << "Loop n: " << loops << endl;
+    c = clock();
+    }
     ClearClass(k);
     // We add every point in the cluster with the minium distance to the inertia point
     for(int i = 0; i < Points.size(); i++){
@@ -26,6 +35,11 @@ vector<Set> Kmeans::Calculate(int k){
     // We calculate the new inertia center from the points in the cluster
     InertiaCenter = getNewInertiaCenters();
     equals = std::equal(OldInertiaCenter.begin(), OldInertiaCenter.end(), InertiaCenter.begin());
+    if(verbose){
+      Printime(((double)clock() - c) / CLOCKS_PER_SEC);
+      cout << "New loop? " << equals << endl;
+      loops++;
+    }
   } while(!equals);
   return Class;
 }
@@ -74,4 +88,10 @@ void Kmeans::ClearClass(int k){
   for(int i = 0; i < k; i++){
     Class.push_back(Set());
   }
+}
+// Function to print the time between loops if mode verbose used
+void Kmeans::Printime(double Time){
+  cout << "Time elapsed: " << (int)(Time / 60) << " m " << (int)Time % 60 << " s " << endl;
+  cout << "T (s): " << Time << endl;
+
 }

@@ -5,6 +5,8 @@
 #include <vector>
 #include "Set.h"
 #include <algorithm>
+#include <iostream>
+#include <time.h>
 
 using namespace std;
 // Class that represent the calculation of the algorithm K-Means for a DPoint and a Set of DPoints
@@ -18,12 +20,13 @@ class Kmeans{
 public:
   Kmeans(Set s);
   Kmeans();
-  vector<Set> Calculate(int k);
+  vector<Set> Calculate(int k, bool verbose);
 private:
   int PosMinDistance(DPoint point);
   vector<DPoint> getNewInertiaCenters();
   DPoint getNewInertiaCenter(vector<DPoint> points);
   void ClearClass(int k);
+  void Printime(double Time);
 };
 
 #endif
