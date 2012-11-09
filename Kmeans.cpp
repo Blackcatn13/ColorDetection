@@ -2,7 +2,7 @@
 
 // Default constructor of the class
 Kmeans::Kmeans(){
-  Points = vector<DPoint>();
+  Points = vector<DPoint*>();
   InitialSet = Set();
 }
 // Constructor that takes a set
@@ -14,7 +14,7 @@ Kmeans::Kmeans(Set s){
 vector<Set> Kmeans::Calculate(int k, bool verbose){
   int loops = 0;
   clock_t c;
-  bool equals = false;
+  bool equal = false;
   // We get the first random inertia center for the point set 
   InertiaCenter = InitialSet.getRandomPoints(k);
   if(verbose) {
@@ -34,23 +34,24 @@ vector<Set> Kmeans::Calculate(int k, bool verbose){
     OldInertiaCenter = InertiaCenter;
     // We calculate the new inertia center from the points in the cluster
     InertiaCenter = getNewInertiaCenters();
-    equals = std::equal(OldInertiaCenter.begin(), OldInertiaCenter.end(), InertiaCenter.begin());
+    //equals = std::equal(OldInertiaCenter.begin(), OldInertiaCenter.end(), InertiaCenter.begin());
+    equal = equals(OldInertiaCenter, InertiaCenter);
     if(verbose){
       Printime(((double)clock() - c) / CLOCKS_PER_SEC);
-      cout << "New loop? " << equals << endl;
+      cout << "New loop? " << !equal << endl;
       loops++;
     }
-  } while(!equals);
+  } while(!equal);
   return Class;
 }
 // Function that returns in witch cluster the given point has to go
-int Kmeans::PosMinDistance(DPoint point){
+int Kmeans::PosMinDistance(DPoint *point){
   int m = 0;
   int distance = 1e32;
   int ndistance;
 
   for(int i = 0; i < InertiaCenter.size(); i++){
-    ndistance = point.Distance(InertiaCenter[i]);
+    ndistance = point->Distance(InertiaCenter[i]);
     if(ndistance < distance){
       m = i;
       distance = ndistance;
@@ -59,24 +60,24 @@ int Kmeans::PosMinDistance(DPoint point){
   return m;
 }
 // Function that returns a new inertia center for a given cluster
-DPoint Kmeans::getNewInertiaCenter(vector<DPoint> points){
+DPoint* Kmeans::getNewInertiaCenter(vector<DPoint*> points){
   vector<float> position;
-  position.resize(points[0].getDimension());
+  position.resize(points[0]->getDimension());
   for(int i = 0; i < points.size(); i++){
-    for(int j = 0; j < points[0].getDimension(); j++){
-      position[j] += points[i].getPosition()[j];
+    for(int j = 0; j < points[0]->getDimension(); j++){
+      position[j] += points[i]->getPosition()[j];
     }
   }
-  for(int i = 0; i < points[0].getDimension(); i++){
+  for(int i = 0; i < points[0]->getDimension(); i++){
     position[i] /= points.size();
   }
-  DPoint point = DPoint();
-  point.setPosition(position);
+  DPoint *point = new DPoint();
+  point->setPosition(position);
   return point;
 }
 // Function that returns all the new inertia center of the given clusters
-vector<DPoint> Kmeans::getNewInertiaCenters(){
-  vector<DPoint> Inertia;
+vector<DPoint*> Kmeans::getNewInertiaCenters(){
+  vector<DPoint*> Inertia;
   for(int i = 0; i < Class.size(); i++){
     Inertia.push_back(getNewInertiaCenter(Class[i].getPoints()));
   }
@@ -94,4 +95,13 @@ void Kmeans::Printime(double Time){
   cout << "Time elapsed: " << (int)(Time / 60) << " m " << (int)Time % 60 << " s " << endl;
   cout << "T (s): " << Time << endl;
 
+}
+// Function that return true if the to vectors are equals
+bool Kmeans::equals(vector<DPoint*> v1, vector<DPoint*> v2){
+    for(int i = 0; i < v1.size(); i++){
+        if(*v1[i] != *v2[i]){
+            return false;
+        }
+    }
+    return true;
 }

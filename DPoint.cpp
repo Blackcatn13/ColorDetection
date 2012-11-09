@@ -9,10 +9,10 @@ void DPoint::setPosition(vector<float> nposition){
   Position = nposition;
 }
 // Function that returns the distance between this point and the parameter point
-float DPoint::Distance(DPoint p){
+float DPoint::Distance(DPoint *p){
   float dist = 0;
-  for(int i = 0; i < p.getDimension(); i++){
-    dist += pow((double)(Position[i] - p.getPosition()[i]), 2);
+  for(int i = 0; i < p->getDimension(); i++){
+    dist += pow((double)(Position[i] - p->getPosition()[i]), 2);
   }
   dist = sqrt(dist);
   return dist;

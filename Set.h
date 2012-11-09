@@ -9,12 +9,12 @@
 using namespace std;
 // Class that represents a set of DPoints
 class Set{
-  vector<DPoint> Points;
+  vector<DPoint*> Points;
 public:
   Set();
-  vector<DPoint> getPoints() {return Points;}
-  void addPoint(DPoint p);
-  virtual vector<DPoint> getRandomPoints(int k);
+  vector<DPoint*> getPoints() {return Points;}
+  void addPoint(DPoint *p);
+  virtual vector<DPoint*> getRandomPoints(int k);
 };
 
 #endif
