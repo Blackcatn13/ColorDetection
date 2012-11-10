@@ -33,7 +33,13 @@ vector<Set> Kmeans::Calculate(int k, bool verbose){
     }
     OldInertiaCenter = InertiaCenter;
     // We calculate the new inertia center from the points in the cluster
-    InertiaCenter = getNewInertiaCenters();
+    try{
+        InertiaCenter = getNewInertiaCenters();
+    }
+    catch (int e){
+        cout << endl << "One cluster is empty, try with a k less than " << e << endl;
+        throw e;
+    }
     //equals = std::equal(OldInertiaCenter.begin(), OldInertiaCenter.end(), InertiaCenter.begin());
     equal = equals(OldInertiaCenter, InertiaCenter);
     if(verbose){
@@ -62,6 +68,10 @@ int Kmeans::PosMinDistance(DPoint *point){
 // Function that returns a new inertia center for a given cluster
 DPoint* Kmeans::getNewInertiaCenter(vector<DPoint*> points){
   vector<float> position;
+
+  if(points.size() == 0){
+      throw 1;
+  }
   position.resize(points[0]->getDimension());
   for(int i = 0; i < points.size(); i++){
     for(int j = 0; j < points[0]->getDimension(); j++){
@@ -78,10 +88,16 @@ DPoint* Kmeans::getNewInertiaCenter(vector<DPoint*> points){
 // Function that returns all the new inertia center of the given clusters
 vector<DPoint*> Kmeans::getNewInertiaCenters(){
   vector<DPoint*> Inertia;
-  for(int i = 0; i < Class.size(); i++){
-    Inertia.push_back(getNewInertiaCenter(Class[i].getPoints()));
+  int i;
+  try{
+      for(i = 0; i < Class.size(); i++){
+        Inertia.push_back(getNewInertiaCenter(Class[i].getPoints()));
+      }
+      return Inertia;
   }
-  return Inertia;
+  catch (int e){
+      throw i;
+  }
 }
 // Function to reset the cluster to begin a new loop
 void Kmeans::ClearClass(int k){
