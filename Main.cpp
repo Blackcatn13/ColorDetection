@@ -11,8 +11,12 @@ enum Color_names {white = 0, pink, red, orange, brown, yellow, grey, green, blue
 using namespace std;
 using namespace cimg_library;
 
-// Function to compare to values
+// Function to compare two ints
 bool comp (int first, int second) { return second<first;}
+// Function to compare two *DPoints
+bool compareDPoint(DPoint *p1, DPoint *p2) {return *p1 < *p2;}
+// Function that return equality from *DPoint
+bool sameDPoint(DPoint *p1, DPoint *p2) {return *p1 == *p2;}
 // Functions used by main
 void printtime(double time);
 void printMenu();
@@ -203,8 +207,8 @@ Set getSet(int PointType, bool Repetitions){
     else{
         vector<DPoint*> aux = imgPoints.getPoints();
         list<DPoint*> removequals = list<DPoint*>(aux.begin(), aux.end());
-        removequals.sort();
-        removequals.unique();
+        removequals.sort(compareDPoint);
+        removequals.unique(sameDPoint);
         vector<DPoint*> vecaux = vector<DPoint*>(removequals.begin(), removequals.end());
         Set setAux = Set();
         for(int i = 0; i < vecaux.size(); i++){
