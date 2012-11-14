@@ -6,6 +6,7 @@
 #include <map>
 // Includes of the new Point types
 #include "CIELABPoint.h"
+#include "RGBAPoint.h"
 
 enum Color_names {white = 0, pink, red, orange, brown, yellow, grey, green, blue, purple, black};
 using namespace std;
@@ -21,6 +22,7 @@ Set getSet(int PointType, bool Repetitions);
 void printcolors(vector<DPoint*>);
 int getminordistance(DPoint *p);
 // Functions to init the 11 colors in the diferent spaces
+vector<DPoint*> initRGBA();
 vector<DPoint*> initCIELAB();
 vector<DPoint*> initDefault();
 
@@ -29,7 +31,7 @@ vector<Set> globalSet;
 // Variable that holds the image
 CImg<float> img;
 // Variables of for the menu and the program
-//string filename = "Img/16243.bmp";
+string filename = "Images/16243.bmp";
 int PointType = 0;
 int k = 4;
 // Vector with the 11 colors in the diferent spaces
@@ -54,10 +56,10 @@ int main(){
       case 1:
           cout << "Input the name of the new file to load: " << endl;
           filename.clear();
-          //filename.append("Img/");
-          cin >> aux;
-          filename.append(aux);
-          filename.append(".bmp");
+		  filename.append("Images/");
+		  cin >> aux;
+		  filename.append(aux);
+		  filename.append(".bmp");
           try{
             img.load(filename.c_str());
           }
@@ -73,6 +75,7 @@ int main(){
           cout << "Input the new Point type: " << endl;
           cout << "0- " << "DPoint with eucledian distance " << endl;
           cout << "1- " << "CIELABPoint with eucledian distance " << endl;
+		  cout << "7- " << "RGBAPoint with eucledian distance " << endl;
           cin >> PointType;
           break;
       case 4:
@@ -149,6 +152,9 @@ Set getSet(int PointType, bool Repetitions){
         imgAux.RGBtoLab();
         p = new CIELABPoint();
         break;
+	case 7: 
+        p = new RGBAPoint();
+        break;
     }
 
     for(int i = 0; i < imgAux.height(); i++){
@@ -165,6 +171,9 @@ Set getSet(int PointType, bool Repetitions){
                 break;
             case 1:
                 p = new CIELABPoint();
+                break;
+			case 7:
+                p = new RGBAPoint();
                 break;
             }
         }
@@ -196,6 +205,9 @@ void printcolors(vector<DPoint*> v){
       break;
   case 1:
       ColorSpace = initCIELAB();
+      break;
+  case 7:
+      ColorSpace = initRGBA();
       break;
   }
 
@@ -289,6 +301,114 @@ vector<DPoint*> initDefault(){
       */
     return vector<DPoint*>();
 }
+
+vector<DPoint*> initRGBA(){
+      /* 0 - white r = 255, g = 255, b = 255
+      1 - pink r = 255, g = 192, b = 203
+      2 - red r = 255, g = 0, b = 0
+      3 - orange r = 255, g = 127, b = 0
+      4 - brown r = 150, g = 75, b = 0
+      5 - yellow r = 255, g = 255, b = 0
+      6 - grey  r = 128, g = 128, b = 128
+      7 - green r = 0, g = 255, b = 0
+      8 - blue r = 0, g = 0, b = 255
+      9 - purple r = 143, g = 0, b = 255
+      10- black r = 0, g = 0, b = 0
+      */
+  vector<DPoint*> RGBAcolors = vector<DPoint*>();
+  DPoint *p = new DPoint();
+  vector<float> pos = vector<float>();
+  //0 - white r=255, g=255, b=255
+  pos.push_back(220);
+  pos.push_back(220);
+  pos.push_back(220);
+  p->setPosition(pos);
+  RGBAcolors.push_back(p);
+  p = new DPoint();
+  pos.erase(pos.begin(), pos.end());
+  // 1 - pink r = 255, g = 192, b = 203
+  pos.push_back(220);
+  pos.push_back(190);
+  pos.push_back(200);
+  p->setPosition(pos);
+  RGBAcolors.push_back(p);
+  p = new DPoint();
+  pos.erase(pos.begin(), pos.end());
+  //2 - red r = 255, g = 0, b = 0
+    pos.push_back(220);
+  pos.push_back(0);
+  pos.push_back(0);
+  p->setPosition(pos);
+  RGBAcolors.push_back(p);
+  p = new DPoint();
+  pos.erase(pos.begin(), pos.end());
+  //3 - orange r = 255, g = 127, b = 0
+    pos.push_back(220);
+  pos.push_back(120);
+  pos.push_back(0);
+  p->setPosition(pos);
+  RGBAcolors.push_back(p);
+  p = new DPoint();
+  pos.erase(pos.begin(), pos.end());
+  //4 - brown r = 150, g = 75, b = 0
+    pos.push_back(130);
+  pos.push_back(70);
+  pos.push_back(0);
+  p->setPosition(pos);
+  RGBAcolors.push_back(p);
+  p = new DPoint();
+  pos.erase(pos.begin(), pos.end());
+  //5 - yellow r = 255, g = 255, b = 0
+  pos.push_back(220);
+  pos.push_back(220);
+  pos.push_back(0);
+  p->setPosition(pos);
+  RGBAcolors.push_back(p);
+  p = new DPoint();
+  pos.erase(pos.begin(), pos.end());
+  //6 - grey  r = 128, g = 128, b = 128
+    pos.push_back(90);
+  pos.push_back(90);
+  pos.push_back(90);
+  p->setPosition(pos);
+  RGBAcolors.push_back(p);
+  p = new DPoint();
+  pos.erase(pos.begin(), pos.end());
+  //7 - green r = 0, g = 255, b = 0
+  pos.push_back(0);
+  pos.push_back(220);
+  pos.push_back(0);
+  p->setPosition(pos);
+  RGBAcolors.push_back(p);
+  p = new DPoint();
+  pos.erase(pos.begin(), pos.end());
+  //8 - blue r = 0, g = 0, b = 255
+    pos.push_back(0);
+  pos.push_back(0);
+  pos.push_back(220);
+  p->setPosition(pos);
+  RGBAcolors.push_back(p);
+  p = new DPoint();
+  pos.erase(pos.begin(), pos.end());
+  //9 - purple r = 143, g = 0, b = 255
+    pos.push_back(120);
+  pos.push_back(0);
+  pos.push_back(220);
+  p->setPosition(pos);
+  RGBAcolors.push_back(p);
+  p = new DPoint();
+  pos.erase(pos.begin(), pos.end());
+  // 10- black r = 0, g = 0, b = 0
+    pos.push_back(10);
+  pos.push_back(10);
+  pos.push_back(10);
+  p->setPosition(pos);
+  RGBAcolors.push_back(p);
+  pos.erase(pos.begin(), pos.end());
+  return RGBAcolors;
+}
+
+
 vector<DPoint*> initCIELAB(){
      /* 0 - white l = 100, a = 0, b = 0
       1 - pink l = 83.585, a = 24.15, b = 3.315
