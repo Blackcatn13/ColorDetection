@@ -3,12 +3,16 @@
 #include <CImg.h>
 #include <time.h>
 #include <string>
+#include <map>
 // Includes of the new Point types
 #include "CIELABPoint.h"
 
+enum Color_names {white = 0, pink, red, orange, brown, yellow, grey, green, blue, purple, black};
 using namespace std;
 using namespace cimg_library;
 
+// Function to compare to values
+bool comp (int first, int second) { return second<first;}
 // Functions used by main
 void printtime(double time);
 void printMenu();
@@ -25,7 +29,7 @@ vector<Set> globalSet;
 // Variable that holds the image
 CImg<float> img;
 // Variables of for the menu and the program
-string filename = "16243.bmp";
+//string filename = "Img/16243.bmp";
 int PointType = 0;
 int k = 4;
 // Vector with the 11 colors in the diferent spaces
@@ -40,7 +44,7 @@ int main(){
   img.load(filename.c_str());
   // Variable for the menu options
   int menu = 0;
-
+  string aux;
   do{
       printMenu();
       cin >> menu;
@@ -50,7 +54,10 @@ int main(){
       case 1:
           cout << "Input the name of the new file to load: " << endl;
           filename.clear();
-          cin >> filename;
+          //filename.append("Img/");
+          cin >> aux;
+          filename.append(aux);
+          filename.append(".bmp");
           try{
             img.load(filename.c_str());
           }
@@ -127,7 +134,6 @@ void printMenu(){
     cout << "6- " << "Start color identification without color repetitions " << endl;
     cout << "7- " << "Start color identification with verbose mode without color repetitions " << endl;
     cout << "9- " << "Exit " << endl;
-
 }
 
 Set getSet(int PointType, bool Repetitions){
@@ -192,52 +198,65 @@ void printcolors(vector<DPoint*> v){
       ColorSpace = initCIELAB();
       break;
   }
+
   colors.resize(ColorSpace.size());
-  int j=0;
+  int j = 0;
   for(int i = 0; i < v.size(); i++){
     j = getminordistance(v[i]);
     colors[j] += globalSet[i].getPoints().size();
   }
 
-  cout << endl << "The list of repetitions in this foto is :" << endl;
-
-  for(int i = 0; i < colors.size(); i++){
-    switch(i){
-    case 0:
-      cout << "- White colors: " << colors[i] << endl;
-      break;
-    case 1:
-      cout << "- Pink colors: " << colors[i] << endl;
-      break;
-    case 2:
-      cout << "- Red colors: " << colors[i] << endl;
-      break;
-    case 3:
-      cout << "- Orange colors: " << colors[i] << endl;
-      break;
-    case 4:
-      cout << "- Brown colors: " << colors[i] << endl;
-      break;
-    case 5:
-      cout << "- Yellow colors: " << colors[i] << endl;
-      break;
-    case 6:
-      cout << "- Grey colors: " << colors[i] << endl;
-      break;
-    case 7:
-      cout << "- Green colors: " << colors[i] << endl;
-      break;
-    case 8:
-      cout << "- Blue colors: " << colors[i] << endl;
-      break;
-    case 9:
-      cout << "- Purple colors: " << colors[i] << endl;
-      break;
-    case 10:
-      cout << "- Black colors: " << colors[i] << endl;
-      break;
-    }
+  bool(*fn_pt)(int,int) = comp;
+  multimap<int,Color_names, bool(*) (int,int)> color (fn_pt);
+  multimap<int,Color_names, bool(*) (int,int)>::iterator it;
+  for (int i = 0; i < colors.size(); i++){
+      color.insert(pair<int, Color_names>(colors[i],Color_names(i)));
   }
+  int count = 0;
+  it = color.begin();
+  cout << endl << "The list of colors is :" << endl;
+  bool next;
+  do{
+      switch(it->second){
+      case white:
+          cout << "White";
+          break;
+      case pink:
+          cout << "Pink";
+          break;
+      case red:
+          cout << "Red";
+          break;
+      case orange:
+          cout << "Orange";
+          break;
+      case brown:
+          cout << "Brown";
+          break;
+      case yellow:
+          cout << "Yellow";
+          break;
+      case grey:
+          cout << "Grey";
+          break;
+      case green:
+          cout << "Green";
+          break;
+      case blue:
+          cout << "Blue";
+          break;
+      case purple:
+          cout << "Purple";
+          break;
+      case black:
+          cout << "Black";
+          break;
+      }
+      count++;
+      it++;
+      next = ((count < 4) && (it->first != 0));
+      if (next) cout << ", ";
+  } while(next);
 }
 
 int getminordistance(DPoint *point){
@@ -282,6 +301,8 @@ vector<DPoint*> initCIELAB(){
       8 - blue l=32.303, a=79.197, b=-107.864
       9 - purple l=29.782, a=58.940, b=-36.498
       10- black l=0, a=0, b=0*/
+    // Experimental colors
+    /*
   vector<DPoint*> labcolors = vector<DPoint*>();
   DPoint *p = new DPoint();
   vector<float> pos = vector<float>();
@@ -361,6 +382,97 @@ vector<DPoint*> initCIELAB(){
     pos.push_back(44.498);
   pos.push_back(77.867);
   pos.push_back(-48.214);
+  p->setPosition(pos);
+  labcolors.push_back(p);
+  p = new DPoint();
+  pos.erase(pos.begin(), pos.end());
+  //    10- black l=0, a=0, b=0
+    pos.push_back(0);
+  pos.push_back(0);
+  pos.push_back(0);
+  p->setPosition(pos);
+  labcolors.push_back(p);
+  pos.erase(pos.begin(), pos.end());*/
+   // Defacto colors
+  vector<DPoint*> labcolors = vector<DPoint*>();
+  DPoint *p = new DPoint();
+  vector<float> pos = vector<float>();
+  //0 - white l = 100, a = 0, b = 0
+  pos.push_back(100);
+  pos.push_back(0);
+  pos.push_back(0);
+  p->setPosition(pos);
+  labcolors.push_back(p);
+  p = new DPoint();
+  pos.erase(pos.begin(), pos.end());
+  //1 - pink l = 92.069, a = 11.20, b = 1.05
+  pos.push_back(92.069);
+  pos.push_back(11.20);
+  pos.push_back(1.05);
+  p->setPosition(pos);
+  labcolors.push_back(p);
+  p = new DPoint();
+  pos.erase(pos.begin(), pos.end());
+  //2 - red l = 53.24, a = 80.09, a = 67.20
+    pos.push_back(53.24);
+  pos.push_back(80.09);
+  pos.push_back(67.20);
+  p->setPosition(pos);
+  labcolors.push_back(p);
+  p = new DPoint();
+  pos.erase(pos.begin(), pos.end());
+  //3 - orange l=80.11, a =12.36, b =82.4
+    pos.push_back(80.11);
+  pos.push_back(12.36);
+  pos.push_back(82.4);
+  p->setPosition(pos);
+  labcolors.push_back(p);
+  p = new DPoint();
+  pos.erase(pos.begin(), pos.end());
+  //    4 - brown l=64.59, a = 10.21, b=69.08
+    pos.push_back(64.59);
+  pos.push_back(10.21);
+  pos.push_back(69.08);
+  p->setPosition(pos);
+  labcolors.push_back(p);
+  p = new DPoint();
+  pos.erase(pos.begin(), pos.end());
+  //    5 - yellow l=97.139, a=-21.55, b=94.475
+    pos.push_back(97.139);
+  pos.push_back(-21.55);
+  pos.push_back(94.475);
+  p->setPosition(pos);
+  labcolors.push_back(p);
+  p = new DPoint();
+  pos.erase(pos.begin(), pos.end());
+  //    6 - grey  l=76.189, a = 0, b = 0
+    pos.push_back(76.189);
+  pos.push_back(0);
+  pos.push_back(0);
+  p->setPosition(pos);
+  labcolors.push_back(p);
+  p = new DPoint();
+  pos.erase(pos.begin(), pos.end());
+  //    7 - green l=87.73, a = -86.18, b=83.177
+    pos.push_back(87.73);
+  pos.push_back(-86.18);
+  pos.push_back(83.177);
+  p->setPosition(pos);
+  labcolors.push_back(p);
+  p = new DPoint();
+  pos.erase(pos.begin(), pos.end());
+  //    8 - blue l=32.29, a=79.18, b=-107.86
+    pos.push_back(32.29);
+  pos.push_back(79.18);
+  pos.push_back(-107.86);
+  p->setPosition(pos);
+  labcolors.push_back(p);
+  p = new DPoint();
+  pos.erase(pos.begin(), pos.end());
+  //    9 - purple l=50.85, a=90.15, b=-76.58
+    pos.push_back(50.85);
+  pos.push_back(90.15);
+  pos.push_back(-76.58);
   p->setPosition(pos);
   labcolors.push_back(p);
   p = new DPoint();
