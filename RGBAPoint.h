@@ -5,7 +5,7 @@
 
 class RGBAPoint: public DPoint{
 public:
- RGBAPoint();
+  RGBAPoint();
   virtual float Distance(DPoint *p);
 };
 
