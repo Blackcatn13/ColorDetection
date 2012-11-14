@@ -350,3 +350,86 @@ vector<DPoint*> initCIELAB(){
 
   return labcolors;
 }
+
+vector<DPoint*> initHSV(){
+/*  0 - white   h = 0,      s = 0,    v = 1
+    1 - pink    h = 349.52, s = 0.25, v = 1
+    2 - red     h = 0,      s = 1,    v = 1
+    3 - orange  h = 29.88,  s = 1,    v = 1
+    4 - brown   h = 30,     s = 1,    v = 0.59
+    5 - yellow  h = 60,     s = 1,    v = 1
+    6 - grey    h = 0,      s = 0,    v = 0.5
+    7 - green   h = 120,    s = 1,    v = 1
+    8 - blue    h = 240,    s = 1,    v = 1
+    9 - purple  h = 273.65, s = 1,    v = 1
+    10- black   h = 0,      s = 0,    Sv = 0
+*/
+  vector<DPoint*> HSVcolors = vector<DPoint*>();
+  DPoint *p = new DPoint();
+  vector<float> pos = vector<float>();
+  // White
+  pos.push_back(0); pos.push_back(0); pos.push_back(1);
+  p->setPosition(pos);
+  HSVcolors.push_back(p);
+  p = new DPoint();
+  pos.erase(pos.begin(), pos.end());
+  // Pink
+  pos.push_back(349.52); pos.push_back(0.25); pos.push_back(1);
+  p->setPosition(pos);
+  HSVcolors.push_back(p);
+  p = new DPoint();
+  pos.erase(pos.begin(), pos.end());
+  // Red
+  pos.push_back(0); pos.push_back(1); pos.push_back(1);
+  p->setPosition(pos);
+  HSVcolors.push_back(p);
+  p = new DPoint();
+  pos.erase(pos.begin(), pos.end());
+  // Orange
+  pos.push_back(29.88); pos.push_back(1); pos.push_back(1);
+  p->setPosition(pos);
+  HSVcolors.push_back(p);
+  p = new DPoint();
+  pos.erase(pos.begin(), pos.end());
+  // Brown
+  pos.push_back(30); pos.push_back(1); pos.push_back(0.59);
+  p->setPosition(pos);
+  HSVcolors.push_back(p);
+  p = new DPoint();
+  pos.erase(pos.begin(), pos.end());
+  // Yellow
+  pos.push_back(60); pos.push_back(1); pos.push_back(1);
+  p->setPosition(pos);
+  HSVcolors.push_back(p);
+  p = new DPoint();
+  pos.erase(pos.begin(), pos.end());
+  // Grey
+  pos.push_back(0); pos.push_back(0); pos.push_back(0.5);
+  p->setPosition(pos);
+  HSVcolors.push_back(p);
+  p = new DPoint();
+  pos.erase(pos.begin(), pos.end());
+  // Green
+  pos.push_back(120); pos.push_back(1); pos.push_back(1);
+  p->setPosition(pos);
+  HSVcolors.push_back(p);
+  p = new DPoint();
+  pos.erase(pos.begin(), pos.end());
+  // Blue
+  pos.push_back(240); pos.push_back(1); pos.push_back(1);
+  p->setPosition(pos);
+  HSVcolors.push_back(p);
+  p = new DPoint();
+  pos.erase(pos.begin(), pos.end());
+  // Purple
+  pos.push_back(273.65); pos.push_back(1); pos.push_back(1);
+  p->setPosition(pos);
+  HSVcolors.push_back(p);
+  p = new DPoint();
+  pos.erase(pos.begin(), pos.end());
+  // Black
+  pos.push_back(0); pos.push_back(0); pos.push_back(0);
+  p->setPosition(pos);
+  HSVcolors.push_back(p);
+  p = new DPoint();
+  pos.erase(pos.begin(), pos.end());
