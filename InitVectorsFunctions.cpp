@@ -433,4 +433,5 @@ vector<DPoint*> initHSV(){
   HSVcolors.push_back(p);
   p = new DPoint();
   pos.erase(pos.begin(), pos.end());
+  return HSVcolors;
 }
