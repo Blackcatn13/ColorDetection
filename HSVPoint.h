@@ -3,6 +3,7 @@
 
 #include "DPoint.h"
 #include "math.h"
+#define PI 3.14159265
 
 class HSVPoint: public DPoint{
 public:

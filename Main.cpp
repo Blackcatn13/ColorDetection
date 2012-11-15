@@ -131,7 +131,7 @@ int main(){
           km = Kmeans(getSet(PointType, false));
           try{
             globalSet = km.Calculate(k, true);
-          } catch (int e){
+          }catch (int e){
               cout << "New k: " << k-e << endl;
               globalSet = km.Calculate(k-e, true);
           }
