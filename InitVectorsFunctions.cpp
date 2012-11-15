@@ -126,8 +126,8 @@ vector<DPoint*> initRGB(){
   pos.erase(pos.begin(), pos.end());
   //3 - orange r = 255, g = 127, b = 0
     pos.push_back(230);
-  pos.push_back(130);
-  pos.push_back(30);
+  pos.push_back(140);
+  pos.push_back(20);
   p->setPosition(pos);
   RGBAcolors.push_back(p);
   p = new DPoint();
@@ -149,9 +149,9 @@ vector<DPoint*> initRGB(){
   p = new DPoint();
   pos.erase(pos.begin(), pos.end());
   //6 - grey  r = 128, g = 128, b = 128
-    pos.push_back(120);
-  pos.push_back(120);
-  pos.push_back(120);
+    pos.push_back(130);
+  pos.push_back(130);
+  pos.push_back(130);
   p->setPosition(pos);
   RGBAcolors.push_back(p);
   p = new DPoint();
@@ -173,17 +173,17 @@ vector<DPoint*> initRGB(){
   p = new DPoint();
   pos.erase(pos.begin(), pos.end());
   //9 - purple r = 143, g = 0, b = 255
-    pos.push_back(180);
+    pos.push_back(150);
   pos.push_back(30);
-  pos.push_back(200);
+  pos.push_back(180);
   p->setPosition(pos);
   RGBAcolors.push_back(p);
   p = new DPoint();
   pos.erase(pos.begin(), pos.end());
   // 10- black r = 0, g = 0, b = 0
-    pos.push_back(30);
-  pos.push_back(30);
-  pos.push_back(30);
+    pos.push_back(40);
+  pos.push_back(40);
+  pos.push_back(40);
   p->setPosition(pos);
   RGBAcolors.push_back(p);
   pos.erase(pos.begin(), pos.end());
