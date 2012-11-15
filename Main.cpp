@@ -1,11 +1,15 @@
 #include "Kmeans.h"
-#include <CImg.h>
+#include "CImg.h"
 #include <string>
 #include <map>
 #include "InitVectorsFunctions.h"
 // Includes of the new Point types
 #include "CIELABPoint.h"
 #include "RGBAPoint.h"
+#include "HSVPoint.h"
+
+//Compilation in linux system:
+//g++ -o main CIELABPoint.cpp CIELABPoint.h CImg.h DPoint.cpp DPoint.h HSVPoint.cpp HSVPoint.h InitVectorsFunctions.cpp InitVectorsFunctions.h  Kmeans.cpp Kmeans.h Main.cpp RGBAPoint.cpp RGBAPoint.h Set.cpp Set.h  -O2 -L/usr/X11R6/lib -lm -lpthread -lX11 && ./main
 
 enum Color_names {white = 0, pink, red, orange, brown, yellow, grey, green, blue, purple, black};
 using namespace std;
@@ -76,6 +80,7 @@ int main(){
           cout << "1- " << "CIELABPoint with eucledian distance and LAB Defacto Colors" << endl;
           cout << "2- " << "CIELABPoint with eucledian distance and LAB Experimental Colors" << endl;
 		  cout << "7- " << "RGBAPoint with eucledian distance and RGB Experimental Colors" << endl;
+          cout << "8- " << "HSVPoint with euclidian distance and HSV Defacto Colors" << endl;
           cin >> PointType;
           break;
       case 4:
@@ -126,7 +131,7 @@ int main(){
           km = Kmeans(getSet(PointType, false));
           try{
             globalSet = km.Calculate(k, true);
-          } catch (int e){
+          }catch (int e){
               cout << "New k: " << k-e << endl;
               globalSet = km.Calculate(k-e, true);
           }
@@ -134,8 +139,7 @@ int main(){
           printcolors(km.getInertiaCenter());
           cout << endl;
           break;
-     }
-    
+      }
   }while(menu != 9);
 
   return 0;
@@ -176,6 +180,9 @@ Set getSet(int PointType, bool Repetitions){
 	case 7: 
         p = new RGBAPoint();
         break;
+    case 8:
+        p = new HSVPoint();
+        break;
     }
 
     for(int i = 0; i < imgAux.height(); i++){
@@ -196,6 +203,9 @@ Set getSet(int PointType, bool Repetitions){
                 break;
 			case 7:
                 p = new RGBAPoint();
+                break;
+            case 8:
+                p = new HSVPoint();
                 break;
             }
         }
@@ -233,6 +243,9 @@ void printcolors(vector<DPoint*> v){
       break;
   case 7:
       ColorSpace = initRGB();
+      break;
+  case 8:
+      ColorSpace = initHSV();
       break;
   }
 
