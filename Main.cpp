@@ -32,7 +32,7 @@ CImg<float> img;
 // Variables of for the menu and the program
 string filename = "Images/16243.bmp";
 int PointType = 0;
-int k = 4;
+int k = 5;
 // Vector with the 11 colors in the diferent spaces
 vector<DPoint*> ColorSpace;
 
