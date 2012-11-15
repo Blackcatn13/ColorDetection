@@ -158,7 +158,7 @@ vector<DPoint*> initRGB(){
   pos.erase(pos.begin(), pos.end());
   //7 - green r = 0, g = 255, b = 0
   pos.push_back(30);
-  pos.push_back(170);
+  pos.push_back(110);
   pos.push_back(30);
   p->setPosition(pos);
   RGBAcolors.push_back(p);
