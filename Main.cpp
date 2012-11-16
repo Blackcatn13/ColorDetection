@@ -360,8 +360,9 @@ vector<string> printcolors(vector<DPoint*> v){
             break;
         }
     }
-    cout << "\b" << (char) 219 << "|";
+    cout << "\b" << (char) 219;
   }
+  cout << endl;
   globalSet.clear();
 
   return output;
