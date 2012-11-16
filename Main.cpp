@@ -131,7 +131,19 @@ int main(){
           }
           ofstream file;
           try{
-            file.open("output.txt");
+            ss.str("");
+            ss << k;
+            aux.append("k" + ss.str() + "-");
+            ss.str("");
+            ss << menu;
+            aux.append("op" + ss.str() + "-");
+            ss.str("");
+            ss << PointType;
+            aux.append("p" + ss.str());
+            aux.append(".txt");
+            file.open(aux.c_str());
+            aux("");
+            ss.str("");
             file << "/*****************************************************/" << "\n";
             file << "Operation mode" << "\n";
             file << "K value: " << k << "\t" << "Point type: " << PointType << "\n";
@@ -401,9 +413,9 @@ vector<string> imageAnalysis(bool Rep, bool Verbose){
         cout << "without verbose";
      cout << endl;
     c = clock();
-    km = Kmeans(getSet(PointType, true));
+    km = Kmeans(getSet(PointType, Rep));
     try{
-      globalSet = km.Calculate(k, Rep);
+      globalSet = km.Calculate(k, Verbose);
     } catch (int e){
         cout << "New k: " << k-e << endl;
         globalSet = km.Calculate(k-e, Verbose);
