@@ -1,14 +1,17 @@
 #include "Kmeans.h"
 #include "CImg.h"
+
 #include <string>
 #include <map>
+#include <sstream>
+#include <iostream>
+#include <fstream>
+
 #include "InitVectorsFunctions.h"
 // Includes of the new Point types
 #include "CIELABPoint.h"
 #include "RGBAPoint.h"
 #include "HSVPoint.h"
-
-#include <sstream>
 
 //Compilation in linux system:
 //g++ -o main CIELABPoint.cpp CIELABPoint.h CImg.h DPoint.cpp DPoint.h HSVPoint.cpp HSVPoint.h InitVectorsFunctions.cpp InitVectorsFunctions.h  Kmeans.cpp Kmeans.h Main.cpp RGBAPoint.cpp RGBAPoint.h Set.cpp Set.h  -O2 -L/usr/X11R6/lib -lm -lpthread -lX11 && ./main
@@ -26,10 +29,10 @@ bool sameDPoint(DPoint *p1, DPoint *p2) {return *p1 == *p2;}
 // Functions used by main
 void printtime(double time);
 void printMenu();
-void imageAnalysis(bool Rep, bool Verbose);
+vector<string> imageAnalysis(bool Rep, bool Verbose);
 Set getSet(int PointType, bool Repetitions);
 // Funtion that prints the list of the 4 most used colors in the image
-void printcolors(vector<DPoint*>);
+vector<string> printcolors(vector<DPoint*>);
 int getminordistance(DPoint *p);
 
 // Set to be used in the other functions
@@ -96,6 +99,7 @@ int main(){
       case 8:
           int numImg = -1;
           stringstream ss;
+          vector<string> output;
           cout << "Start entire image folder - Caution! May be slower -" << endl;
           cout << "Insert the number of images" << endl;
           cin >> numImg;
@@ -125,21 +129,39 @@ int main(){
               Verbose = true;
               break;
           }
-          for (int i=0; i < numImg; i++){
-              filename.clear();
-              if (i < 10)
-                  filename.append("Images/Image00");
-              else
-                  filename.append("Images/Image0");
-              ss.str("");
-              ss << i;
-              filename.append(ss.str());
-              filename.append(".bmp");
-              try{
-                img.load(filename.c_str());
-                imageAnalysis(Rep,Verbose);
-              }catch(...){
-              }
+          ofstream file;
+          try{
+            file.open("output.txt");
+            file << "/*****************************************************/" << "\n";
+            file << "Operation mode" << "\n";
+            file << "K value: " << k << "\t" << "Point type: " << PointType << "\n";
+            file << "Repetitions: " << Rep << "\t" << "Verbose: " << Verbose << "\n";
+            file << "/*****************************************************/" << "\n\n";
+            for (int i=0; i < numImg; i++){
+                filename.clear();
+                if (i < 10)
+                    filename.append("Images/Image00");
+                else
+                    filename.append("Images/Image0");
+                ss.str("");
+                ss << i;
+                filename.append(ss.str());
+                filename.append(".bmp");
+                try{
+                  img.load(filename.c_str());
+                  output = imageAnalysis(Rep,Verbose);
+                  for (int j = 0; j < output.size(); j++){
+                    file << output[j];
+                    file << "\t";
+                  }
+                  file << "\n";
+                  output.clear();
+                }catch(...){
+                }
+            }
+            file.close();
+          }catch(...){
+            cout << "Error creating file output.txt" << endl;
           }
           break;
       }
@@ -176,12 +198,12 @@ Set getSet(int PointType, bool Repetitions){
     case 0:
         p = new DPoint();
         break;
-    case 1: 
+    case 1:
     case 2:
         imgAux.RGBtoLab();
         p = new CIELABPoint();
         break;
-	case 7: 
+    case 7:
         p = new RGBAPoint();
         break;
     case 8:
@@ -205,7 +227,7 @@ Set getSet(int PointType, bool Repetitions){
             case 2:
                 p = new CIELABPoint();
                 break;
-			case 7:
+            case 7:
                 p = new RGBAPoint();
                 break;
             case 8:
@@ -232,7 +254,7 @@ Set getSet(int PointType, bool Repetitions){
     }
 }
 
-void printcolors(vector<DPoint*> v){
+vector<string> printcolors(vector<DPoint*> v){
   vector<int> colors = vector<int>();
 
   switch(PointType){
@@ -268,49 +290,49 @@ void printcolors(vector<DPoint*> v){
   }
   int count = 0;
   it = color.begin();
-  cout << endl << "The list of colors is :" << endl;
+  vector<string> output;
   bool next;
   do{
       switch(it->second){
       case white:
-          cout << "White";
+          output.push_back("White");
           break;
       case pink:
-          cout << "Pink";
+          output.push_back("Pink");
           break;
       case red:
-          cout << "Red";
+          output.push_back("Red");
           break;
       case orange:
-          cout << "Orange";
+          output.push_back("Orange");
           break;
       case brown:
-          cout << "Brown";
+          output.push_back("Brown");
           break;
       case yellow:
-          cout << "Yellow";
+          output.push_back("Yellow");
           break;
       case grey:
-          cout << "Grey";
+          output.push_back("Grey");
           break;
       case green:
-          cout << "Green";
+          output.push_back("Green");
           break;
       case blue:
-          cout << "Blue";
+          output.push_back("Blue");
           break;
       case purple:
-          cout << "Purple";
+          output.push_back("Purple");
           break;
       case black:
-          cout << "Black";
+          output.push_back("Black");
           break;
       }
       count++;
       it++;
       next = ((count < 4) && (it->first != 0));
-      if (next) cout << ", ";
   } while(next);
+  return output;
 }
 
 int getminordistance(DPoint *point){
@@ -329,7 +351,8 @@ int getminordistance(DPoint *point){
 }
 
 //Image analysis
-void imageAnalysis(bool Rep, bool Verbose){
+vector<string> imageAnalysis(bool Rep, bool Verbose){
+    vector<string> output;
     // Kmeans class var
     Kmeans km;
     // Var to calculate time of ejecution
@@ -352,7 +375,13 @@ void imageAnalysis(bool Rep, bool Verbose){
         cout << "New k: " << k-e << endl;
         globalSet = km.Calculate(k-e, Verbose);
     }
-    printtime(((double)clock() - c) / CLOCKS_PER_SEC);
-    printcolors(km.getInertiaCenter());
+    output = printcolors(km.getInertiaCenter());
+    cout << "Colors: ";
+    for (int i = 0; i < output.size(); i++){
+      cout << output[i] << " ";
+    }
     cout << endl;
+    printtime(((double)clock() - c) / CLOCKS_PER_SEC);
+    cout << endl;
+    return output;
 }
