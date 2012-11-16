@@ -131,25 +131,25 @@ int main(){
           }
           ofstream file;
           try{
-            ss.str("");
+            /*ss.str("");
             ss << k;
             aux.append("k" + ss.str() + "-");
             ss.str("");
-            ss << menu;
+            ss << mode;
             aux.append("op" + ss.str() + "-");
             ss.str("");
             ss << PointType;
             aux.append("p" + ss.str());
             aux.append(".txt");
-            file.open(aux.c_str());
-            aux("");
-            ss.str("");
+            file.open(aux.c_str());*/
+            file.open("output.txt");
             file << "/*****************************************************/" << "\n";
             file << "Operation mode" << "\n";
             file << "K value: " << k << "\t" << "Point type: " << PointType << "\n";
             file << "Repetitions: " << Rep << "\t" << "Verbose: " << Verbose << "\n";
             file << "/*****************************************************/" << "\n\n";
             for (int i=0; i < numImg; i++){
+                cout << endl << i << endl;
                 filename.clear();
                 if (i < 10)
                     filename.append("Images/Image00");
