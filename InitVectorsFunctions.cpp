@@ -81,7 +81,7 @@ vector<DPoint*> initDefault(){
     p->setPosition(pos);
     RGBDefactoColors.push_back(p);
     pos.clear();
-    return vector<DPoint*>();
+    return RGBDefactoColors;
 }
 
 vector<DPoint*> initRGB(){
