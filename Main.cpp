@@ -8,6 +8,8 @@
 #include "RGBAPoint.h"
 #include "HSVPoint.h"
 
+#include <sstream>
+
 //Compilation in linux system:
 //g++ -o main CIELABPoint.cpp CIELABPoint.h CImg.h DPoint.cpp DPoint.h HSVPoint.cpp HSVPoint.h InitVectorsFunctions.cpp InitVectorsFunctions.h  Kmeans.cpp Kmeans.h Main.cpp RGBAPoint.cpp RGBAPoint.h Set.cpp Set.h  -O2 -L/usr/X11R6/lib -lm -lpthread -lX11 && ./main
 
@@ -24,6 +26,7 @@ bool sameDPoint(DPoint *p1, DPoint *p2) {return *p1 == *p2;}
 // Functions used by main
 void printtime(double time);
 void printMenu();
+void imageAnalysis(bool Rep, bool Verbose);
 Set getSet(int PointType, bool Repetitions);
 // Funtion that prints the list of the 4 most used colors in the image
 void printcolors(vector<DPoint*>);
@@ -34,7 +37,7 @@ vector<Set> globalSet;
 // Variable that holds the image
 CImg<float> img;
 // Variables of for the menu and the program
-string filename = "Images/16243.bmp";
+string filename = "Images/Image000.bmp";
 int PointType = 0;
 int k = 5;
 // Vector with the 11 colors in the diferent spaces
@@ -42,10 +45,6 @@ vector<DPoint*> ColorSpace;
 
 // Main function
 int main(){
-  // Var to calculate time of ejecution
-  clock_t c;
-  // Kmeans class var
-  Kmeans km;
   img.load(filename.c_str());
   // Variable for the menu options
   int menu = 0;
@@ -59,15 +58,14 @@ int main(){
       case 1:
           cout << "Input the name of the new file to load: " << endl;
           filename.clear();
-		  filename.append("Images/");
-		  cin >> aux;
-		  filename.append(aux);
-		  filename.append(".bmp");
+          filename.append("Images/");
+          cin >> aux;
+          filename.append(aux);
+          filename.append(".bmp");
           try{
             img.load(filename.c_str());
           }
           catch(...){
-
           }
           break;
       case 2:
@@ -79,65 +77,70 @@ int main(){
           cout << "0- " << "DPoint with eucledian distance and RGB Defacto Colors" << endl;
           cout << "1- " << "CIELABPoint with eucledian distance and LAB Defacto Colors" << endl;
           cout << "2- " << "CIELABPoint with eucledian distance and LAB Experimental Colors" << endl;
-		  cout << "7- " << "RGBAPoint with eucledian distance and RGB Experimental Colors" << endl;
+          cout << "7- " << "RGBAPoint with eucledian distance and RGB Experimental Colors" << endl;
           cout << "8- " << "HSVPoint with euclidian distance and HSV Defacto Colors" << endl;
           cin >> PointType;
           break;
       case 4:
-          cout << "Starting color identification " << endl;
-          c = clock();
-          km = Kmeans(getSet(PointType, true));
-          try{
-            globalSet = km.Calculate(k, false);
-          } catch (int e){
-              cout << "New k: " << k-e << endl;
-              globalSet = km.Calculate(k-e, false);
-          }
-          printtime(((double)clock() - c) / CLOCKS_PER_SEC);
-          printcolors(km.getInertiaCenter());
-          cout << endl;
+          imageAnalysis(false, false);
           break;
       case 5:
-          cout << "Start color identification with verbose mode " << endl;
-          c = clock();
-          km = Kmeans(getSet(PointType, true));
-          try{
-            globalSet = km.Calculate(k, true);
-          } catch (int e){
-              cout << "New k: " << k-e << endl;
-              globalSet = km.Calculate(k-e, true);
-          }
-          printtime(((double)clock() - c) / CLOCKS_PER_SEC);
-          printcolors(km.getInertiaCenter());
-          cout << endl;
+          imageAnalysis(true, false);
           break;
       case 6:
-          cout << "Start color identification without color repetitions " << endl;
-          c = clock();
-          km = Kmeans(getSet(PointType, false));
-          try{
-            globalSet = km.Calculate(k, false);
-          } catch (int e){
-              cout << "New k: " << k-e << endl;
-              globalSet = km.Calculate(k-e, false);
-          }
-          printtime(((double)clock() - c) / CLOCKS_PER_SEC);
-          printcolors(km.getInertiaCenter());
-          cout << endl;
+          imageAnalysis(false, false);
           break;
       case 7:
-          cout << "Start color identification with verbose mode without color repetitions " << endl;
-          c = clock();
-          km = Kmeans(getSet(PointType, false));
-          try{
-            globalSet = km.Calculate(k, true);
-          }catch (int e){
-              cout << "New k: " << k-e << endl;
-              globalSet = km.Calculate(k-e, true);
+          imageAnalysis(true, true);
+          break;
+      case 8:
+          int numImg = -1;
+          stringstream ss;
+          cout << "Start entire image folder - Caution! May be slower -" << endl;
+          cout << "Insert the number of images" << endl;
+          cin >> numImg;
+          cout << "Insert type of image analysis" << endl;
+          cout << "1- " << "Start color identification " << endl;
+          cout << "2- " << "Start color identification with verbose mode " << endl;
+          cout << "3- " << "Start color identification without color repetitions" << endl;
+          cout << "4- " << "Start color identification with verbose mode without color repetitions " << endl;
+          int mode;
+          cin >> mode;
+          bool Rep, Verbose;
+          switch (mode){
+          case 1:
+              Rep = true;
+              Verbose = false;
+              break;
+          case 2:
+              Rep = true;
+              Verbose = true;
+              break;
+          case 3:
+              Rep = false;
+              Verbose = false;
+              break;
+          case 4:
+              Rep = false;
+              Verbose = true;
+              break;
           }
-          printtime(((double)clock() - c) / CLOCKS_PER_SEC);
-          printcolors(km.getInertiaCenter());
-          cout << endl;
+          for (int i=0; i < numImg; i++){
+              filename.clear();
+              if (i < 10)
+                  filename.append("Images/Image00");
+              else
+                  filename.append("Images/Image0");
+              ss.str("");
+              ss << i;
+              filename.append(ss.str());
+              filename.append(".bmp");
+              try{
+                img.load(filename.c_str());
+                imageAnalysis(Rep,Verbose);
+              }catch(...){
+              }
+          }
           break;
       }
   }while(menu != 9);
@@ -160,6 +163,7 @@ void printMenu(){
     cout << "5- " << "Start color identification with verbose mode " << endl;
     cout << "6- " << "Start color identification without color repetitions " << endl;
     cout << "7- " << "Start color identification with verbose mode without color repetitions " << endl;
+    cout << "8- " << "Start entire image folder - Caution! May be slower -" << endl;
     cout << "9- " << "Exit " << endl;
 }
 
@@ -322,4 +326,33 @@ int getminordistance(DPoint *point){
     }
   }
   return m;
+}
+
+//Image analysis
+void imageAnalysis(bool Rep, bool Verbose){
+    // Kmeans class var
+    Kmeans km;
+    // Var to calculate time of ejecution
+    clock_t c;
+    cout << "Start color identification ";
+    if (Rep)
+        cout << "with repetitions ";
+    else
+        cout << "without repetitions ";
+    if (Verbose)
+        cout << "with verbose ";
+    else
+        cout << "without verbose";
+     cout << endl;
+    c = clock();
+    km = Kmeans(getSet(PointType, true));
+    try{
+      globalSet = km.Calculate(k, Rep);
+    } catch (int e){
+        cout << "New k: " << k-e << endl;
+        globalSet = km.Calculate(k-e, Verbose);
+    }
+    printtime(((double)clock() - c) / CLOCKS_PER_SEC);
+    printcolors(km.getInertiaCenter());
+    cout << endl;
 }
