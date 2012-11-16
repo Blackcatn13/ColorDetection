@@ -4,11 +4,26 @@
 Kmeans::Kmeans(){
   Points = vector<DPoint*>();
   InitialSet = Set();
+  // Delete unused pointers
+  for(int i = 0; i < InertiaCenter.size(); i++){
+      delete InertiaCenter[i];
+  }
+  for(int i = 0; i < InitialSet.getPoints().size(); i++){
+      delete InitialSet.getPoints()[i];
+  }
 }
 // Constructor that takes a set
 Kmeans::Kmeans(Set s){
+  // Delete unused pointers
+  for(int i = 0; i < InitialSet.getPoints().size(); i++){
+    delete InitialSet.getPoints()[i];
+  }
   InitialSet = s;
   Points = s.getPoints();
+  // Delete unused pointers
+  for(int i = 0; i < InertiaCenter.size(); i++){
+      delete InertiaCenter[i];
+  }
 }
 // Function that calculate the K-Mean algorithm returning the clusters
 vector<Set> Kmeans::Calculate(int k, bool verbose){
@@ -31,6 +46,7 @@ vector<Set> Kmeans::Calculate(int k, bool verbose){
     for(int i = 0; i < Points.size(); i++){
       Class[PosMinDistance(Points[i])].addPoint(Points[i]);
     }
+
     OldInertiaCenter = InertiaCenter;
     // We calculate the new inertia center from the points in the cluster
     try{
@@ -48,6 +64,7 @@ vector<Set> Kmeans::Calculate(int k, bool verbose){
       loops++;
     }
   } while(!equal);
+
   return Class;
 }
 // Function that returns in witch cluster the given point has to go

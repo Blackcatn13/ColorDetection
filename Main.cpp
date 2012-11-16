@@ -207,6 +207,7 @@ Set getSet(int PointType, bool Repetitions){
         p = new RGBAPoint();
         break;
     case 8:
+        imgAux.RGBtoHSV();
         p = new HSVPoint();
         break;
     }
@@ -256,6 +257,10 @@ Set getSet(int PointType, bool Repetitions){
 
 vector<string> printcolors(vector<DPoint*> v){
   vector<int> colors = vector<int>();
+
+  for(int i = 0; i < ColorSpace.size(); i++){
+      delete ColorSpace[i];
+  }
 
   switch(PointType){
   case 0:
@@ -332,6 +337,33 @@ vector<string> printcolors(vector<DPoint*> v){
       it++;
       next = ((count < 4) && (it->first != 0));
   } while(next);
+
+  // Delete unused pointers
+  cout << endl << "Deleting pointers " << "|";
+  clock_t cl;
+  cl = clock();
+  for(int i = 0; i < globalSet.size(); i++){
+    for(int j = 0; j < globalSet[i].getPoints().size(); j++){
+        delete globalSet[i].getPoints()[j];
+        switch((int)(((double)clock() - cl) / CLOCKS_PER_SEC)% 4){
+        case 0:
+            cout << "\b" << "/";
+            break;
+        case 1:
+            cout << "\b" << "-";
+            break;
+        case 2:
+            cout << "\b" << "\\";
+            break;
+        case 3:
+            cout << "\b" << "|";
+            break;
+        }
+    }
+    cout << "\b" << (char) 219 << "|";
+  }
+  globalSet.clear();
+
   return output;
 }
 

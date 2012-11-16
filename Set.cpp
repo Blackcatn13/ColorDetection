@@ -9,7 +9,6 @@ void Set::addPoint(DPoint *p){
   Points.push_back(p);
 }
 
-
 bool compare(DPoint *p1, DPoint *p2){
     return *p1 < *p2;
 }
