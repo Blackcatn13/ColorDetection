@@ -13,10 +13,7 @@
 #include "RGBAPoint.h"
 
 //Compilation in linux system:
-/*g++ -o main CIELABPoint.cpp CIELABPoint.h CImg.h DPoint.cpp DPoint.h 
-  HSVPoint.cpp HSVPoint.h InitVectorsFunctions.cpp InitVectorsFunctions.h  
-  Kmeans.cpp Kmeans.h Main.cpp RGBAPoint.cpp RGBAPoint.h Set.cpp Set.h  -O2 
-  -L/usr/X11R6/lib -lm -lpthread -lX11 && ./main */
+/*g++ -O3 -o main CIELABPoint.cpp CIELABPoint.h CImg.h DPoint.cpp DPoint.h  InitVectorsFunctions.cpp InitVectorsFunctions.h  Kmeans.cpp Kmeans.h Main.cpp RGBAPoint.cpp RGBAPoint.h Set.cpp Set.h FuzzyColors.h FuzzyColors.cpp  -O2 -L/usr/X11R6/lib -lm -lpthread -lX11 && ./main */
 
 // Enumeration for the 11 colors
 enum Color_names {white = 0, pink, red, orange, brown, yellow, grey, green, blue, purple, black};
@@ -332,7 +329,7 @@ vector<string> printcolors(vector<DPoint*> v){
       colors = getFuzzyCIELAB(v, globalSet);
       break;
   case 8:
-      colors = getFuzzyRGB(v);
+      colors = getFuzzyRGB(v,globalSet);
       break;
   }
 
