@@ -1,13 +1,13 @@
 #include "FuzzyColors.h"
 
-int getminordistance(DPoint *point, vector<pair<CIELABPoint,vector<float>>> points);
+int getminordistance(DPoint *point, vector<pair<CIELABPoint,vector<float> > > points);
 
 vector<int> getFuzzyCIELAB(vector<DPoint*> points, vector<Set> globalSet){
     ifstream file;
     string line;
     stringstream stream;
     file.open("Libro2.txt");
-    vector<pair<CIELABPoint,vector<float>>> CIELABvalues;
+    vector<pair<CIELABPoint,vector<float> > > CIELABvalues;
     vector<int> colorSum;
     vector<float> position;
     vector<float> values;
@@ -29,7 +29,7 @@ vector<int> getFuzzyCIELAB(vector<DPoint*> points, vector<Set> globalSet){
             stream >> aux;
             values.push_back(aux);
         }
-        CIELABvalues.push_back(pair<CIELABPoint,vector<float>>(p,values));
+        CIELABvalues.push_back(pair<CIELABPoint,vector<float> >(p,values));
     }   
     int j = 0;
     colorSum.resize(11);
@@ -50,7 +50,7 @@ vector<int> getFuzzyRGB(vector<DPoint*> points){
 
 
 
-int getminordistance(DPoint *point, vector<pair<CIELABPoint,vector<float>>> points){
+int getminordistance(DPoint *point, vector<pair<CIELABPoint,vector<float> > > points){
   int m = 0;
   int distance = 1e32;
   int ndistance;

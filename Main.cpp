@@ -151,7 +151,7 @@ int main(){
           }
           ofstream file;
           try{
-            /*ss.str("");
+            ss.str("");
             ss << k;
             aux.append("k" + ss.str() + "-");
             ss.str("");
@@ -161,8 +161,8 @@ int main(){
             ss << PointType;
             aux.append("p" + ss.str());
             aux.append(".txt");
-            file.open(aux.c_str());*/
-            file.open("output.txt");
+            file.open(aux.c_str());
+            //file.open("output.txt");
             file << "/*****************************************************/" << "\n";
             file << "Operation mode" << "\n";
             file << "K value: " << k << "\t" << "Point type: " << PointType << "\n";
