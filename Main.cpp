@@ -4,44 +4,59 @@
 #include <string>
 #include <map>
 #include <sstream>
-#include <iostream>
 #include <fstream>
 
 #include "InitVectorsFunctions.h"
+#include "FuzzyColors.h"
 // Includes of the new Point types
 #include "CIELABPoint.h"
 #include "RGBAPoint.h"
 #include "HSVPoint.h"
 
 //Compilation in linux system:
-//g++ -o main CIELABPoint.cpp CIELABPoint.h CImg.h DPoint.cpp DPoint.h HSVPoint.cpp HSVPoint.h InitVectorsFunctions.cpp InitVectorsFunctions.h  Kmeans.cpp Kmeans.h Main.cpp RGBAPoint.cpp RGBAPoint.h Set.cpp Set.h  -O2 -L/usr/X11R6/lib -lm -lpthread -lX11 && ./main
+/*g++ -o main CIELABPoint.cpp CIELABPoint.h CImg.h DPoint.cpp DPoint.h 
+  HSVPoint.cpp HSVPoint.h InitVectorsFunctions.cpp InitVectorsFunctions.h  
+  Kmeans.cpp Kmeans.h Main.cpp RGBAPoint.cpp RGBAPoint.h Set.cpp Set.h  -O2 
+  -L/usr/X11R6/lib -lm -lpthread -lX11 && ./main */
 
+// Enumeration for the 11 colors
 enum Color_names {white = 0, pink, red, orange, brown, yellow, grey, green, blue, purple, black};
 using namespace std;
 using namespace cimg_library;
 
 // Function to compare two ints
 bool comp (int first, int second) { return second<first;}
-// Function to compare two *DPoints
+// Function to compare two DPoints pointers
 bool compareDPoint(DPoint *p1, DPoint *p2) {return *p1 < *p2;}
-// Function that return equality from *DPoint
+// Function that return equality from DPoint pointers
 bool sameDPoint(DPoint *p1, DPoint *p2) {return *p1 == *p2;}
+
 // Functions used by main
+
+// Function to print the elapsed time
 void printtime(double time);
+// Funtion to show the menu
 void printMenu();
+// Function that call the k-means with the diferent options
 vector<string> imageAnalysis(bool Rep, bool Verbose);
+// Function to get the set of points from the file
 Set getSet(int PointType, bool Repetitions);
 // Funtion that prints the list of the 4 most used colors in the image
 vector<string> printcolors(vector<DPoint*>);
+// Function to get wich color have minor ditance with the point
 int getminordistance(DPoint *p);
+
+// Variables
 
 // Set to be used in the other functions
 vector<Set> globalSet;
 // Variable that holds the image
 CImg<float> img;
-// Variables of for the menu and the program
-string filename = "Images/Image000.bmp";
+// Name of the file
+string filename = "Images/16243.bmp";
+// Point type to switch in the functions
 int PointType = 0;
+// K value for the algorithm call
 int k = 5;
 // Vector with the 11 colors in the diferent spaces
 vector<DPoint*> ColorSpace;
@@ -58,6 +73,7 @@ int main(){
       cin.clear();
 
       switch(menu){
+          // Change the name of the file to load
       case 1:
           cout << "Input the name of the new file to load: " << endl;
           filename.clear();
@@ -71,19 +87,23 @@ int main(){
           catch(...){
           }
           break;
+          // Change the k for the algortihm
       case 2:
           cout << "Input the new K: " << endl;
           cin >> k;
           break;
+          // Change the point type
       case 3:
           cout << "Input the new Point type: " << endl;
           cout << "0- " << "DPoint with eucledian distance and RGB Defacto Colors" << endl;
           cout << "1- " << "CIELABPoint with eucledian distance and LAB Defacto Colors" << endl;
           cout << "2- " << "CIELABPoint with eucledian distance and LAB Experimental Colors" << endl;
-          cout << "7- " << "RGBAPoint with eucledian distance and RGB Experimental Colors" << endl;
-          cout << "8- " << "HSVPoint with euclidian distance and HSV Defacto Colors" << endl;
+          cout << "3- " << "CIELABPoint with euclidian distance and fuzzy color naming" << endl;
+          cout << "7- " << "RGBPoint with eucledian distance and RGB Experimental Colors" << endl;
+          cout << "8- " << "RGBPoint with eucledian distance and fuzzy color naming" << endl;
           cin >> PointType;
           break;
+          // Call the algorithm with diferent params
       case 4:
           imageAnalysis(false, false);
           break;
@@ -96,6 +116,7 @@ int main(){
       case 7:
           imageAnalysis(true, true);
           break;
+          // Function to get all the files from the directory with the name Image0
       case 8:
           int numImg = -1;
           stringstream ss;
@@ -182,11 +203,13 @@ int main(){
   return 0;
 }
 
+// Function that show the time elpased in min sec, and in seconds
 void printtime(double time){
   cout << "Time elapsed: " << (int)(time / 60) << " m " << (int)time % 60 << " s " << endl;
   cout << "T (s): " << time << endl;
 }
 
+// Function to show the menu
 void printMenu(){
     cout << endl;
     cout << "Welcom to the Menu " << endl;
@@ -201,29 +224,30 @@ void printMenu(){
     cout << "9- " << "Exit " << endl;
 }
 
+// Function to get the initial set
 Set getSet(int PointType, bool Repetitions){
     Set imgPoints = Set();
     DPoint *p;
     vector<float> position = vector<float>();
     CImg<float> imgAux = img;
+    // Create the new pointer for the diferents points
     switch(PointType){
     case 0:
         p = new DPoint();
         break;
     case 1:
     case 2:
+    case 3:
         imgAux.RGBtoLab();
         p = new CIELABPoint();
         break;
     case 7:
-        p = new RGBAPoint();
-        break;
     case 8:
-        imgAux.RGBtoHSV();
-        p = new HSVPoint();
+        p = new RGBAPoint();
         break;
     }
 
+    // Load the image in the pointers
     for(int i = 0; i < imgAux.height(); i++){
         for(int j = 0; j < imgAux.width(); j++){
             position.push_back(imgAux(j, i, 0, 0));
@@ -238,21 +262,22 @@ Set getSet(int PointType, bool Repetitions){
                 break;
             case 1:
             case 2:
+            case 3:
                 p = new CIELABPoint();
                 break;
             case 7:
-                p = new RGBAPoint();
-                break;
             case 8:
-                p = new HSVPoint();
+                p = new RGBAPoint();
                 break;
             }
         }
     }
 
+    // If we don't need to remove repeated points we return the set
     if(Repetitions){
         return imgPoints;
     }
+    // We take out the repeated points and return the set
     else{
         vector<DPoint*> aux = imgPoints.getPoints();
         list<DPoint*> removequals = list<DPoint*>(aux.begin(), aux.end());
@@ -267,13 +292,14 @@ Set getSet(int PointType, bool Repetitions){
     }
 }
 
+// Function that show the 4 predominant colors of the image
 vector<string> printcolors(vector<DPoint*> v){
   vector<int> colors = vector<int>();
 
   for(int i = 0; i < ColorSpace.size(); i++){
       delete ColorSpace[i];
   }
-
+  // We init the 11 color for the diferents points
   switch(PointType){
   case 0:
       ColorSpace = initDefault();
@@ -287,16 +313,27 @@ vector<string> printcolors(vector<DPoint*> v){
   case 7:
       ColorSpace = initRGB();
       break;
-  case 8:
-      ColorSpace = initHSV();
-      break;
   }
 
-  colors.resize(ColorSpace.size());
   int j = 0;
-  for(int i = 0; i < v.size(); i++){
-    j = getminordistance(v[i]);
-    colors[j] += globalSet[i].getPoints().size();
+  // We calculate the wich of the 11 colors is the nearest to the inertia centers
+  switch(PointType){
+  case 0:
+  case 1:
+  case 2:
+  case 7:
+      colors.resize(ColorSpace.size());
+      for(int i = 0; i < v.size(); i++){
+        j = getminordistance(v[i]);
+        colors[j] += globalSet[i].getPoints().size();
+      }
+      break;
+  case 3:
+      colors = getFuzzyCIELAB(v);
+      break;
+  case 8:
+      colors = getFuzzyRGB(v);
+      break;
   }
 
   bool(*fn_pt)(int,int) = comp;
@@ -372,7 +409,7 @@ vector<string> printcolors(vector<DPoint*> v){
             break;
         }
     }
-    cout << "\b" << (char) 219;
+    cout << "\b" << (char) 219 << "|";
   }
   cout << endl;
   globalSet.clear();
@@ -380,6 +417,7 @@ vector<string> printcolors(vector<DPoint*> v){
   return output;
 }
 
+// Function to get in wich position is the minor distance
 int getminordistance(DPoint *point){
   int m = 0;
   int distance = 1e32;

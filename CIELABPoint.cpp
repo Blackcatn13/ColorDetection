@@ -3,6 +3,7 @@
 CIELABPoint::CIELABPoint(){
 }
 
+// Funtion to get the distance between two CIELab points
 float CIELABPoint::Distance(DPoint *p){
   float dist = 0;
   for(int i = 0; i < p->getDimension(); i++){

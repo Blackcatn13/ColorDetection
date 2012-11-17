@@ -1,5 +1,6 @@
 #include "InitVectorsFunctions.h"
 
+// Function to init the 11 colors to a defacto RGB colors
 vector<DPoint*> initDefault(){
     /* 0 - white r = 255, g = 255, b = 255
       1 - pink r = 255, g = 192, b = 203
@@ -84,6 +85,7 @@ vector<DPoint*> initDefault(){
     return RGBDefactoColors;
 }
 
+// Function to init the 11 colors to a experimental RGB colors
 vector<DPoint*> initRGB(){
       /* 0 - white r = 255, g = 255, b = 255
       1 - pink r = 255, g = 192, b = 203
@@ -190,6 +192,7 @@ vector<DPoint*> initRGB(){
   return RGBAcolors;
 }
 
+// Function to init the 11 colors to a defacto CIELab colors
 vector<DPoint*> initDefactoCIELAB(){
     
    // Defacto colors
@@ -267,6 +270,7 @@ vector<DPoint*> initDefactoCIELAB(){
   return labcolors;
 }
 
+// Function to init the 11 colors to a experimental CIELab colors
 vector<DPoint*> initCIELAB(){
  /* 0 - white l = 100, a = 0, b = 0
       1 - pink l = 83.585, a = 24.15, b = 3.315
@@ -351,6 +355,7 @@ vector<DPoint*> initCIELAB(){
   return labcolors;
 }
 
+// Function to init the 11 colors to a defacto HSV colors
 vector<DPoint*> initHSV(){
 /*  0 - white   h = 0,      s = 0,    v = 1
     1 - pink    h = 349.52, s = 0.25, v = 1

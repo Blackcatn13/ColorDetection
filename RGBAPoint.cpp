@@ -3,6 +3,7 @@
 RGBAPoint::RGBAPoint(){
 }
 
+// Function to get the distance between two RGB points
 float RGBAPoint::Distance(DPoint *p){
   float dist = 0;
   for(int i = 0; i < p->getDimension(); i++){

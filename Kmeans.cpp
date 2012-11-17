@@ -56,13 +56,13 @@ vector<Set> Kmeans::Calculate(int k, bool verbose){
         cout << endl << "One cluster is empty, trying with a minor k " << endl;
         throw e;
     }
-    //equals = std::equal(OldInertiaCenter.begin(), OldInertiaCenter.end(), InertiaCenter.begin());
     equal = equals(OldInertiaCenter, InertiaCenter);
     if(verbose){
       Printime(((double)clock() - c) / CLOCKS_PER_SEC);
       cout << "New loop? " << !equal << endl;
       loops++;
     }
+    // We repeat the loop while the Inertia Center is diferent with the previous Inertia Center
   } while(!equal);
 
   return Class;
@@ -86,6 +86,7 @@ int Kmeans::PosMinDistance(DPoint *point){
 DPoint* Kmeans::getNewInertiaCenter(vector<DPoint*> points){
   vector<float> position;
 
+  // If one of the clusters is empty we throw an exception
   if(points.size() == 0){
       throw 1;
   }
@@ -111,6 +112,7 @@ vector<DPoint*> Kmeans::getNewInertiaCenters(){
       }
       return Inertia;
   }
+  // If an exception ocurred we return the number of empty cluster to try with a minor k
   catch (int e){
       int ceros = 0;
       for(int i = 0; i < Class.size(); i++){
