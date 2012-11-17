@@ -2,14 +2,15 @@
 #define FuzzyColors_H
 
 #include <vector>
-#include "DPoint.h"
-#include "Set.h"
 #include <fstream>
 #include <sstream>
-
-#include <iostream>
+#include <string>
+#include "DPoint.h"
+#include "CIELABPoint.h"
+#include "RGBAPoint.h"
+#include "Set.h"
 
 vector<int> getFuzzyCIELAB(vector<DPoint*> points);
-vector<int> getFuzzyRGB(vector<DPoint*> points, vector<Set>);
+vector<int> getFuzzyRGB(vector<DPoint*> points, vector<Set> globalSet);
 
 #endif

@@ -7,20 +7,62 @@ vector<int> getFuzzyCIELAB(vector<DPoint*> points){
 
 }
 
-vector<int> getFuzzyRGB(vector<DPoint*> points, vector<Set> set){
-  try{
+int getminordistance(DPoint *point, vector<pair<RGBAPoint,vector<float> > > points);
+
+vector<int> getFuzzyRGB(vector<DPoint*> points, vector<Set> globalSet){
     ifstream file;
-    file.open("mv_RGB.txt");
     string line;
-    while(!file.eof()){
-      getline(file, line);
-      cout << line << endl;
-    }
-    file.close();
-  }catch(...){
-    cout << "The file can't be readed!" << endl;
+    stringstream stream;
+    vector<int> colorSum;
+    try{
+      file.open("mv_RGB.txt");
+      vector<pair<RGBAPoint,vector<float> > > RGBAvalues;
+      vector<float> position;
+      vector<float> values;
+      float aux;
+      RGBAPoint p = RGBAPoint();
+      while(!file.eof()){
+          getline(file, line);
+          stream.clear();
+          stream << line;
+          position.clear();
+          for(int i = 0; i < 3; i++){
+              stream >> aux;
+              position.push_back(aux);
+          }
+          p.setPosition(position);
+          values.clear();
+          for(int i = 0; i < 11; i++){
+              stream >> aux;
+              values.push_back(aux);
+          }
+          RGBAvalues.push_back(pair<RGBAPoint,vector<float> >(p,values));
+      }
+      int j = 0;
+      colorSum.resize(11);
+      for(int i = 0; i < points.size(); i++){
+          j = getminordistance(points[i],RGBAvalues);
+          for(int x = 0; x < 11; x++){
+              colorSum[x] += RGBAvalues[j].second[x] * globalSet[i].getPoints().size();
+          }
+      }
+      file.close();
+    }catch(...){
   }
+  return colorSum;
+}
 
-  return vector<int>();
+int getminordistance(DPoint *point, vector<pair<RGBAPoint,vector<float> > > points){
+  int m = 0;
+  int distance = 1e32;
+  int ndistance;
 
+  for(int i = 0; i < points.size(); i++){
+      ndistance = point->Distance(&(DPoint)points[i].first);
+    if(ndistance < distance){
+      m = i;
+      distance = ndistance;
+    }
+  }
+  return m;
 }
