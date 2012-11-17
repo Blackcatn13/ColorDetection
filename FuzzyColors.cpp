@@ -7,7 +7,7 @@ vector<int> getFuzzyCIELAB(vector<DPoint*> points, vector<Set> globalSet){
     ifstream file;
     string line;
     stringstream stream;
-    file.open("Libro2.txt");
+    file.open("mv_Lab.txt");
     vector<pair<CIELABPoint,vector<float> > > CIELABvalues;
     vector<int> colorSum;
     vector<float> position;
