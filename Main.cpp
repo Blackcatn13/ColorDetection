@@ -11,7 +11,6 @@
 // Includes of the new Point types
 #include "CIELABPoint.h"
 #include "RGBAPoint.h"
-#include "HSVPoint.h"
 
 //Compilation in linux system:
 /*g++ -o main CIELABPoint.cpp CIELABPoint.h CImg.h DPoint.cpp DPoint.h 
@@ -329,7 +328,7 @@ vector<string> printcolors(vector<DPoint*> v){
       }
       break;
   case 3:
-      colors = getFuzzyCIELAB(v);
+      colors = getFuzzyCIELAB(v, globalSet);
       break;
   case 8:
       colors = getFuzzyRGB(v);
