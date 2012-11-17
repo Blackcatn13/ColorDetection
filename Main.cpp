@@ -162,6 +162,7 @@ int main(){
             aux.append("p" + ss.str());
             aux.append(".txt");
             file.open(aux.c_str());
+	    aux = "";
             //file.open("output.txt");
             file << "/*****************************************************/" << "\n";
             file << "Operation mode" << "\n";
