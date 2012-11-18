@@ -31,7 +31,8 @@ vector<Set> Kmeans::Calculate(int k, bool verbose){
   clock_t c;
   bool equal = false;
   // We get the first random inertia center for the point set 
-  InertiaCenter = InitialSet.getRandomPoints(k);
+  //InertiaCenter = InitialSet.getRandomPoints(k);
+  InertiaCenter = InitialSet.getKaufmanPoints(k);
   if(verbose) {
     cout << "The number of points is: " << Points.size() << endl;
   }
